@@ -1,0 +1,1 @@
+/home/justindecker/uFire/uFire_SHT20/lib/uFire_SHT20/rust/target/debug/ufire_sht20_bin: /home/justindecker/uFire/uFire_SHT20/lib/uFire_SHT20/rust/src/lib.rs /home/justindecker/uFire/uFire_SHT20/lib/uFire_SHT20/rust/src/main.rs

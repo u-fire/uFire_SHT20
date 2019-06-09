@@ -1,0 +1,9 @@
+/home/justindecker/uFire/uFire_SHT20/lib/uFire_SHT20/rust/target/debug/deps/liberror_chain-e017e177a89b2ba7.rlib: /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/lib.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/impl_error_chain_kind.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/error_chain.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/quick_main.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/example_generated.rs
+
+/home/justindecker/uFire/uFire_SHT20/lib/uFire_SHT20/rust/target/debug/deps/error_chain-e017e177a89b2ba7.d: /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/lib.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/impl_error_chain_kind.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/error_chain.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/quick_main.rs /home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/example_generated.rs
+
+/home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/lib.rs:
+/home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/impl_error_chain_kind.rs:
+/home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/error_chain.rs:
+/home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/quick_main.rs:
+/home/justindecker/.cargo/registry/src/github.com-1ecc6299db9ec823/error-chain-0.11.0/src/example_generated.rs:
