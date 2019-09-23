@@ -1,21 +1,25 @@
-### Isolated EC Probe Interface
+### SHT20 Temperature and Humidity Sensor
 
 > Monitor hydroponic nutrient levels or salinity in pools.
- - Electrical Conductivity in Siemens (0.5 - 20.0 mS/cm)
- - Total Dissolved Solids in PPM (250 - 100,000 PPM)
- - Salinity in PSU (2 - 12 PSU)
- - Temperature in Celsius/Fahrenheit (-55 - 125 C)
- - Electrically Isolated
+ - Temperature range: -40 to 125 C(-40 to 257 F)
+ - Humidity range: 0 to 100 % RH
+ - Temperature accuracy: ± 0.5% C
+ - Humidity accuracy: ± 5% RH
+ - Interface: I2C
+ - Voltage range: 2.1 - 3.6 V
  
-##### What it is
+### What it is
 
-An electrically isolated I2C sensor device, a waterproof temperature sensor, and an electrical conductivity probe. It measures the conductivity of a solution and converts it into Siemens (S) total dissolved solids and salinity. The firmware allows for single or dual-point calibration with temperature compensation.
+An SHT20 sensor in a plastic enclosure with a 1m length of cable.
 
-The board uses the [Qwiic](https://www.sparkfun.com/qwiic) Connect System for wiring, it's an easy-to-use, polarized, push-to-fit connector. No more mistaken connections or soldering header pins. 
+The device uses the Qwiic Connect System for wiring, it's an easy-to-use, polarized, push-to-fit connector. No more mistaken connections or soldering header pins.
+
+### Using it
+
+There is plenty of [documentation](/docs/uFire_SHT20/) on the [specification](/docs/uFire_SHT20/#characteristics), and [setup](/docs/uFire_SHT20/#getting-started) of the sensor.
 
 #### Running this example
-From the /rust folder, type `cargo run`. You may run into permission issues and need to run the executable with sudo. `sudo ./target/debug/ufire_ec_bin`. You'll be presented with a `> ` prompt. Type `help` and you'll get a list of commands you can run to perform various tasks with the board like taking an EC or temperature measurement. 
-
+From the /rust folder, type `cargo run`. You may run into permission issues and need to run the executable with sudo. `sudo ./target/debug/ufire_sht20_bin`. You'll be presented with a `> ` prompt. Type `help` and you'll get a list of commands you can run. 
 
 ### Get the board
 Visit [uFire.co](https://ufire.co).

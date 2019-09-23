@@ -1,2 +1,0 @@
-cargo:rerun-if-changed=README.md
-cargo:rerun-if-changed=README.md.skt.md

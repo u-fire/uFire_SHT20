@@ -15,7 +15,7 @@ extern crate i2cdev;
 use self::i2cdev::core::*;
 use self::i2cdev::linux::{LinuxI2CDevice, LinuxI2CError};
 
-//const SHT20_I2C: u8 =               0x40;
+const SHT20_I2C: u16 =              0x40;
 const SHT20_TEMP_HM: u8 =           0xE3;
 const SHT20_HUMID_HM : u8 =         0xE5;
 const SHT20_WRITE_USER_REG: u8 =    0xE6;
@@ -38,50 +38,28 @@ pub struct SHT20 {
 }
 
 impl SHT20 {
-    /// Create a new EcProbe object
+    /// Create a new SHT20 object
     ///
-    /// Pass the i2c port to use, it must be a software overlay device, and I2C address.
+    /// Pass the i2c port to use.
     /// # Example
     /// ```
-    /// let mut ec = ufire_ec::EcProbe::new("/dev/i2c-3", 0x3c).unwrap();
+    /// let mut sht20 = SHT20::new("/dev/i2c-3").unwrap();
     /// ```
-    pub fn new(filename: &'static str, address: u16) -> Result<Self, Box<LinuxI2CError>> {
-        let dev = LinuxI2CDevice::new(filename, address)?;
+    pub fn new(filename: &'static str) -> Result<Self, Box<LinuxI2CError>> {
+        let dev = LinuxI2CDevice::new(filename, SHT20_I2C)?;
 
         Ok(SHT20 { dev: Box::new(dev) })
-    }
-
-    /// Starts the library
-    ///
-    /// # Example
-    /// ```
-    /// let mut ec = ufire_ec::EcProbe::new("/dev/i2c-3", 0x3c).unwrap();
-    /// ec.measure_temp();
-    /// ```
-    pub fn begin(&mut self, resolution: u8) -> Result<(), Box<LinuxI2CError>> {
-        self.dev.smbus_write_byte(SHT20_RESET)?;
-        thread::sleep(Duration::from_millis(SOFT_RESET_DELAY));
-        let mut _resolution: u8 = resolution;
-        let _onchip_heater:u8 = _DISABLE_ONCHIP_HEATER;
-        let _otp_reload: u8 = _DISABLE_OTP_RELOAD;
-
-        self._change_register(SHT20_READ_USER_REG)?;
-        let mut config: u8 = self.dev.smbus_read_byte()?;
-        config = (config & _RESERVED_BITMASK) | _resolution | _onchip_heater | _otp_reload;
-        self.dev.smbus_write_byte(SHT20_WRITE_USER_REG)?;
-        self.dev.smbus_write_byte(config)?;
-
-        Ok(())
     }
 
     /// Start a temperature measurement
     ///
     /// # Example
     /// ```
-    /// let mut ec = ufire_ec::EcProbe::new("/dev/i2c-3", 0x3c).unwrap();
-    /// ec.measure_temp();
+    /// let mut sht20 = SHT20::new("/dev/i2c-3").unwrap();
+    /// let temp:f32 = sht20.temperature().unwrap();
     /// ```
     pub fn temperature(&mut self) -> Result<(f32), Box<LinuxI2CError>> {
+	self._reset()?;
         self.dev.smbus_write_byte(SHT20_TEMP_HM)?;
         thread::sleep(Duration::from_millis(TEMPERATURE_DELAY));
         self._change_register(SHT20_TEMP_HM)?;
@@ -92,14 +70,15 @@ impl SHT20 {
     }
 
 
-    /// Start a temperature measurement
+    /// Start a humidity measurement
     ///
     /// # Example
     /// ```
-    /// let mut ec = ufire_ec::EcProbe::new("/dev/i2c-3", 0x3c).unwrap();
-    /// ec.measure_temp();
+    /// let mut sht20 = SHT20::new("/dev/i2c-3").unwrap();
+    /// let hum:f32 = sht20.humidity().unwrap();
     /// ```
     pub fn humidity(&mut self) -> Result<(f32), Box<LinuxI2CError>> {
+	self._reset()?;
         self.dev.smbus_write_byte(SHT20_HUMID_HM)?;
         thread::sleep(Duration::from_millis(HUMIDITY_DELAY));
         self._change_register(SHT20_HUMID_HM)?;
@@ -107,6 +86,24 @@ impl SHT20 {
         let lsb: u8 = self.dev.smbus_read_byte()?;
 
         Ok(-6.0 + 125.0 * ((msb as f32) * 256.0 + (lsb as f32)) / 65536.0)
+    }
+
+
+    pub fn _reset(&mut self) -> Result<(), Box<LinuxI2CError>> {
+        self.dev.smbus_write_byte(SHT20_RESET)?;
+        thread::sleep(Duration::from_millis(SOFT_RESET_DELAY));
+        let mut _resolution: u8 = RESOLUTION_12BITS;
+        let _onchip_heater:u8 = _DISABLE_ONCHIP_HEATER;
+        let _otp_reload: u8 = _DISABLE_OTP_RELOAD;
+
+        self._change_register(SHT20_READ_USER_REG)?;
+        let mut config: u8 = self.dev.smbus_read_byte()?;
+        config = (config & _RESERVED_BITMASK) | _resolution | _onchip_heater | _otp_reload;
+        //self.dev.smbus_write_byte(SHT20_WRITE_USER_REG)?;
+	//thread::sleep(Duration::from_millis(1000));
+        //self.dev.smbus_write_byte(config)?;
+	self.dev.smbus_write_byte_data(SHT20_WRITE_USER_REG, config)?;
+        Ok(())
     }
 
     pub fn _write_register(&mut self, register: u8, f_val: f32) -> Result<(), Box<LinuxI2CError>> {

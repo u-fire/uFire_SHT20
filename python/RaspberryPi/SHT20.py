@@ -33,8 +33,8 @@ class SHT20():
 
         config = self.bus.read_byte_data(SHT20_I2C, SHT20_READ_USER_REG)
         config = ((config & _RESERVED_BITMASK) | self._resolution | self._onchip_heater | self._otp_reload)
-        self.bus.write_byte(SHT20_I2C, SHT20_WRITE_USER_REG)
-        self.bus.write_byte(SHT20_I2C, config)
+        #self.bus.write_byte(SHT20_I2C, SHT20_WRITE_USER_REG)
+        self.bus.write_byte_data(SHT20_I2C, SHT20_WRITE_USER_REG, config)
 
     def humidity(self):
         self.bus.write_byte(SHT20_I2C, SHT20_HUMID_HM)

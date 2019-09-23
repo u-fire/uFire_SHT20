@@ -23,9 +23,10 @@ The library to use it is in the Arduino and Particle.io IDE. A [python](https://
 
 ```
 #include "uFire_SHT20.h"
-
 uFire_SHT20 sht20;
-sht20.temperature()
+
+float temp_c = sht20.temperature();
+float rh = sht20.humidity();
 ```
 
 #### Buy it
