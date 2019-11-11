@@ -9,7 +9,9 @@ void setup()
 
 void loop()
 {
-  Serial.println((String)sht20.temperature() + "°");
+  Serial.println((String)sht20.temperature() + "°C");
+  Serial.println((String)sht20.temperature_f() + "°F");
   Serial.println((String)sht20.humidity() + " RH%");
-  delay(1000);
+  Serial.println();
+  delay(5000);
 }

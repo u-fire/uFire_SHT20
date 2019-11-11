@@ -60,6 +60,20 @@ float uFire_SHT20::temperature()
   return value * (175.72 / 65536.0)- 46.85;
 }
 
+float uFire_SHT20::temperature_f()
+{
+  _reset();
+  Wire.beginTransmission(SHT20_I2C);
+  Wire.write(SHT20_TEMP);
+  Wire.endTransmission();
+  delay(TEMPERATURE_DELAY);
+  Wire.requestFrom(SHT20_I2C, 2);
+  uint8_t msb = Wire.read();
+  uint8_t lsb = Wire.read();
+  uint16_t value = msb << 8 | lsb;
+  return ((value * (175.72 / 65536.0)- 46.85)  * 1.8) + 32;
+}
+
 float uFire_SHT20::humidity()
 {
   _reset();
@@ -72,4 +86,20 @@ float uFire_SHT20::humidity()
   uint8_t lsb = Wire.read();
   uint16_t value = msb << 8 | lsb;
   return value * (125.0 / 65536.0) - 6.0;
+}
+
+bool uFire_SHT20::connected()
+{
+  Wire.beginTransmission(SHT20_I2C);
+  Wire.write(SHT20_READ_USER_REG);
+  Wire.endTransmission();
+  Wire.requestFrom(SHT20_I2C, 1);
+  uint8_t config = Wire.read();
+  
+  if (config != 0xFF) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }

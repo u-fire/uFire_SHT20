@@ -40,7 +40,9 @@ public:
   #endif // ifndef ESP32
   ~uFire_SHT20(){};
   float temperature();
+  float temperature_f();
   float humidity();
+  bool connected();
 
 private:
   void _reset();
