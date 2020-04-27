@@ -24,6 +24,10 @@
 #define SOFT_RESET_DELAY       20
 #define TEMPERATURE_DELAY      100
 #define HUMIDITY_DELAY         40
+#define SHT20_RESOLUTION_12BITS      0b00000000
+#define SHT20_RESOLUTION_11BITS      0b10000001
+#define SHT20_RESOLUTION_10BITS      0b10000000
+#define SHT20_RESOLUTION_8BITS       0b00000001
 
 class uFire_SHT20
 {
@@ -32,19 +36,25 @@ public:
   uint8_t RESOLUTION_11BITS     = 0b10000001;
   uint8_t RESOLUTION_10BITS     = 0b10000000;
   uint8_t RESOLUTION_8BITS      = 0b00000001;
-  uFire_SHT20();
-  uFire_SHT20(uint8_t resolution);
-  #ifdef ESP32
-  uFire_SHT20(uint8_t sda, uint8_t scl);
-  uFire_SHT20(uint8_t sda, uint8_t scl, uint8_t resolution);
-  #endif // ifndef ESP32
-  ~uFire_SHT20(){};
+  float tempC;
+  float tempF;
+  float vpd_kPa;
+  float dew_pointC;
+  float dew_pointF;
+  float RH;
+
+  bool begin(uint8_t resolution=SHT20_RESOLUTION_12BITS, uint8_t address=SHT20_I2C, TwoWire &wirePort=Wire);
   float temperature();
   float temperature_f();
   float humidity();
+  float vpd();
+  float dew_point();
+  void measure_all();
   bool connected();
 
 private:
+  uint8_t _address;
+  TwoWire *_i2cPort;
   void _reset();
   uint8_t _resolution;
   uint8_t _onchip_heater;

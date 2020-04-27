@@ -1,30 +1,14 @@
 #include "uFire_SHT20.h"
 
-uFire_SHT20::uFire_SHT20()
+bool uFire_SHT20::begin(uint8_t resolution, uint8_t address, TwoWire &wirePort)
 {
-  _resolution = RESOLUTION_12BITS;
-  Wire.begin();
-}
+   _address = address;
+   _resolution = resolution;
+  _i2cPort = &wirePort;
 
-uFire_SHT20::uFire_SHT20(uint8_t resolution)
-{
-  _resolution = resolution;
-  Wire.begin();
-}
 
-#ifdef ESP32
-uFire_SHT20::uFire_SHT20(uint8_t sda, uint8_t scl)
-{
-  _resolution = RESOLUTION_12BITS;
-  Wire.begin(sda, scl);
+  return connected();
 }
-uFire_SHT20::uFire_SHT20(uint8_t sda, uint8_t scl, uint8_t resolution)
-{
-  _resolution = resolution;
-  Wire.begin(sda, scl);
-}
-#endif // ifndef ESP32
-
 void uFire_SHT20::_reset()
 {
   Wire.beginTransmission(SHT20_I2C);
@@ -46,6 +30,13 @@ void uFire_SHT20::_reset()
   Wire.endTransmission();
 }
 
+void uFire_SHT20::measure_all()
+{
+  // also measures temp/humidity
+  vpd();
+  dew_point();
+}
+
 float uFire_SHT20::temperature()
 {
   _reset();
@@ -57,7 +48,9 @@ float uFire_SHT20::temperature()
   uint8_t msb = Wire.read();
   uint8_t lsb = Wire.read();
   uint16_t value = msb << 8 | lsb;
-  return value * (175.72 / 65536.0)- 46.85;
+  tempC = value * (175.72 / 65536.0)- 46.85;
+  tempF = ((value * (175.72 / 65536.0)- 46.85)  * 1.8) + 32;
+  return tempC;
 }
 
 float uFire_SHT20::temperature_f()
@@ -71,7 +64,9 @@ float uFire_SHT20::temperature_f()
   uint8_t msb = Wire.read();
   uint8_t lsb = Wire.read();
   uint16_t value = msb << 8 | lsb;
-  return ((value * (175.72 / 65536.0)- 46.85)  * 1.8) + 32;
+  tempC = value * (175.72 / 65536.0)- 46.85;
+  tempF = ((value * (175.72 / 65536.0)- 46.85)  * 1.8) + 32;
+  return tempF;
 }
 
 float uFire_SHT20::humidity()
@@ -85,7 +80,35 @@ float uFire_SHT20::humidity()
   uint8_t msb = Wire.read();
   uint8_t lsb = Wire.read();
   uint16_t value = msb << 8 | lsb;
-  return value * (125.0 / 65536.0) - 6.0;
+  RH = value * (125.0 / 65536.0) - 6.0;
+  return RH;
+}
+
+float uFire_SHT20::vpd()
+{
+  temperature();
+  humidity();
+
+  float es = 0.6108 * exp(17.27 * tempC / (tempC + 237.3));
+  float ae = RH / 100 * es;
+  vpd_kPa = es - ae;
+
+  return vpd_kPa;
+}
+
+float uFire_SHT20::dew_point()
+{
+  temperature();
+  humidity();
+
+  float tem = -1.0 * tempC;
+  float esdp = 6.112 * exp(-1.0 * 17.67 * tem / (243.5 - tem));
+  float ed = RH / 100.0 * esdp;
+  float eln = log(ed / 6.112);
+  dew_pointC = -243.5 * eln / (eln - 17.67 );
+
+  dew_pointF = (dew_pointC * 1.8) + 32;
+  return dew_pointC;
 }
 
 bool uFire_SHT20::connected()

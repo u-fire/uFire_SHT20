@@ -1,6 +1,6 @@
 {
   "name": "uFire SHT20",
-  "keywords": "temperature, celsius, humidity, sht20, sht2x",
+  "keywords": "temperature, celsius, humidity, sht20, sht2x, vpd, dew point, vapor pressure deficit, rh",
   "description": "Measure atmospheric temperature and humdity.",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
       "maintainer": true
     }
   ],
-  "version": "1.0.1",
+  "version": "1.1.0",
   "frameworks": "arduino",
   "platforms": "*"
 }

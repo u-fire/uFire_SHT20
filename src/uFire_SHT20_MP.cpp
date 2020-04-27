@@ -5,6 +5,7 @@
 void uFire_SHT20_MP::begin(uFire_SHT20 *p_sht20)
 {
   sht20 = p_sht20;
+  sht20->begin();
 }
 
 String uFire_SHT20_MP::processMsgPack(String json)

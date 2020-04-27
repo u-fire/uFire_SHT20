@@ -2,7 +2,7 @@
 
 Measure temperature and humidity with the Sensiron SHT20 sensor.    
 
- - **Temperature range**: -40 to 125 C(-40 to 257 F)
+- **Temperature range**: -40 to 125 C(-40 to 257 F)
 - **Humidity range**: 0 to 100 % RH
 - **Temperature accuracy**: ± 0.5% C
 - **Humidity accuracy**: ± 5% RH
@@ -25,6 +25,8 @@ The library to use it is in the Arduino and Particle.io IDE. A [python](https://
 #include "uFire_SHT20.h"
 uFire_SHT20 sht20;
 
+Wire.begin();
+sht20.begin();
 float temp_c = sht20.temperature();
 float rh = sht20.humidity();
 ```
