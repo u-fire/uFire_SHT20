@@ -58,7 +58,7 @@ impl SHT20 {
     /// let mut sht20 = SHT20::new("/dev/i2c-3").unwrap();
     /// let temp:f32 = sht20.temperature().unwrap();
     /// ```
-    pub fn temperature(&mut self) -> Result<(f32), Box<LinuxI2CError>> {
+    pub fn temperature(&mut self) -> Result<f32, Box<LinuxI2CError>> {
 	self._reset()?;
         self.dev.smbus_write_byte(SHT20_TEMP_HM)?;
         thread::sleep(Duration::from_millis(TEMPERATURE_DELAY));
@@ -77,7 +77,7 @@ impl SHT20 {
     /// let mut sht20 = SHT20::new("/dev/i2c-3").unwrap();
     /// let hum:f32 = sht20.humidity().unwrap();
     /// ```
-    pub fn humidity(&mut self) -> Result<(f32), Box<LinuxI2CError>> {
+    pub fn humidity(&mut self) -> Result<f32, Box<LinuxI2CError>> {
 	self._reset()?;
         self.dev.smbus_write_byte(SHT20_HUMID_HM)?;
         thread::sleep(Duration::from_millis(HUMIDITY_DELAY));
@@ -122,7 +122,7 @@ impl SHT20 {
         }
     }
 
-    pub fn _read_register(&mut self, register: u8) -> Result<(f32), Box<LinuxI2CError>> {
+    pub fn _read_register(&mut self, register: u8) -> Result<f32, Box<LinuxI2CError>> {
         let mut buf: [u8; 4] = [0; 4];
         self._change_register(register)?;
         buf[0] = self.dev.smbus_read_byte()?;
