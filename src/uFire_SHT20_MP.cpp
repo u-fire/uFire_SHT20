@@ -35,30 +35,42 @@ String uFire_SHT20_MP::processMsgPack(String json)
 
 String uFire_SHT20_MP::air_temp()
 {
-  String output;
+  #if ARDUINOJSON_VERSION_MAJOR < 6
   const size_t bufferSize = JSON_OBJECT_SIZE(1) + 20;
   DynamicJsonDocument doc(bufferSize);
+  #else
+  JsonDocument doc;
+  #endif
   doc["at"] = sht20->temperature();
+  String output;
   serializeMsgPack(doc, output);
   return output;
 }
 
 String uFire_SHT20_MP::air_humidity()
 {
-  String output;
+  #if ARDUINOJSON_VERSION_MAJOR < 6
   const size_t bufferSize = JSON_OBJECT_SIZE(1) + 20;
   DynamicJsonDocument doc(bufferSize);
+  #else
+  JsonDocument doc;
+  #endif
   doc["ah"] = sht20->humidity();
+  String output;
   serializeMsgPack(doc, output);
   return output;
 }
 
 String uFire_SHT20_MP::air_connected()
 {
-  String output;
+  #if ARDUINOJSON_VERSION_MAJOR < 6
   const size_t bufferSize = JSON_OBJECT_SIZE(1) + 20;
   DynamicJsonDocument doc(bufferSize);
+  #else
+  JsonDocument doc;
+  #endif
   doc["ac"] = sht20->connected();
+  String output;
   serializeMsgPack(doc, output);
   return output;
 }
